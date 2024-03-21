@@ -1,0 +1,185 @@
+---
+title: "Tp1 PART TWO :"
+output: html_document
+date: "2024-02-28"
+
+---
+## CHAIMA TALHI M1-CS
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# EXO 1 :
+## Simple regression application
+### Step 1: 
+
+#### Load the data into a variable named "tab"
+
+```{r}
+ 
+tab <- read.table("~/Desktop/chaimas2/ml/R/Data(1)/Data/DataHeight.txt", header = TRUE)
+
+```
+
+### Step 2: 
+
+#### Load the vector "age" into a variable named "x"
+
+```{r}
+x <- tab$age
+```
+
+### Step 3: 
+
+#### Load the vector "height" into a variable named "y"
+
+```{r}
+y <- tab$height
+```
+
+### Step 4: 
+
+#### Plot the distribution of y with respect to x
+```{r}
+
+#the functions plot() and qplot() are used for creating plots and visualizations. 
+#plot() is a generic function in R that can create various types of plots depending on the object provided.
+#qplot() is a function from the ggplot2 package, which is a powerful and popular package for creating visually appealing and customizable plots.
+
+plot(x, y, xlab = "Age", ylab = "Height", main = "Distribution of Height by Age")
+
+
+```
+
+### Step 5: 
+
+#### Based on the graph : there is a positive correlation between the two variables height and the age, so when the age increases, height increases . 
+
+
+### Step 6: 
+
+#### Perform a statistical test to determine the correlation between x and y
+```{r}
+cor_test <- cor.test(x,y)
+print(cor_test)
+
+```
+
+### Step 7: 
+
+#### Get the parameter values (q0 and q1)
+```{r}
+q1 <- cor_test$estimate
+q0 <- mean(y) - q1 * mean(x)
+
+```
+
+### Step 8: 
+
+#### Calculate the residual error
+```{r}
+residuals <- y - (q0 + q1 * x)  # y-y_hat  
+residual_error <- sum(residuals^2) # this is the function cost 
+
+```
+
+
+### Step 9: 
+
+#### Equation of the regression line
+```{r}
+regression_equation <- paste("Height =", round(q0, 2), "+", round(q1, 2), " * Age")
+
+```
+
+
+### Step 10: 
+
+#### Plot the regression line
+```{r}
+#The abline() function in R is used to add a straight line to a plot. 
+#its main goal is to draw a regression line on a scatter plot or any other plot where a straight line is desired.
+plot(x, y, xlab = "Age", ylab = "Height", main = "Distribution of Height by Age")
+abline(q0, q1, col = "red")
+
+```
+ 
+
+### Step 11: 
+
+#### Predict the heights of 4 children with ages 3, 7, 9, and 12
+```{r}
+new_age <- c(3,7,9,12)
+predicted_heights <- q0 + q1 * new_age
+print(predicted_heights)
+```
+
+
+### Step 12: 
+
+#### Predict the height of a 10-year-old child with a 95% confidence interval
+```{r}
+model <- lm(height ~ age, data = tab)
+new_age <- 10
+predicted_height <- q0 + q1 * new_age
+
+# Create a new data frame with the desired age
+new_data <- data.frame(age = new_age)
+
+# Calculate the confidence interval
+confidence_interval <- predict(model, newdata = new_data, interval = "confidence", level = 0.95)
+
+print(predicted_height)
+print(confidence_interval)
+
+
+```
+
+
+
+# EXO 2 :
+## Multiple & Polynomial Regression
+
+```{r}
+#Reads the data from a file and assigns it to the variable LungCapData.
+LungCapData <- read.table("~/Desktop/chaimas2/ml/R/Data(1)/Data/LungCapData.txt", header = T, sep="\t")
+
+#Attaches the data frame, allowing direct access to its variables without specifying the data frame name. 
+attach(LungCapData)
+
+#Retrieves the names of the variables in the data frame.
+names(LungCapData)
+
+#Determines the class (data type) of the Age and Smoke variables.
+class(Age)
+class(Smoke)
+
+#Determines the levels (categories) of the Smoke variable.
+levels(Smoke)
+
+#Constructs a linear regression model (model1) to predict 
+#lung capacity (LungCap) based on age (Age) and height (Height).
+model1 <- lm(LungCap ~ Age + Height)
+
+#provide a summary 
+summary(model1)
+
+#computes the Pearson correlation coefficient between the Age and Height variables.
+cor(Age, Height, method="pearson")
+
+#Computes the confidence intervals for the coefficients in model1 at a 95% confidence level.
+confint(model1, coef.level=0.95)
+
+#Constructs a multiple linear regression model
+model2 <- lm(LungCap ~ Age + Height + Smoke + Gender + Caesarean)
+
+#Provides a summary of the model2 regression model
+summary(model2)
+plot(model2)
+
+
+```
+
+
+
+
