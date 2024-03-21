@@ -1,0 +1,245 @@
+---
+
+---
+# CHAIMA TALHI CS
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# TP 3 : PART ONE
+
+## EXO 1 :
+
+# with rpart
+
+#### Load the rpart library on R :
+
+```{r}
+install.packages("rpart")
+library(rpart)
+
+```
+
+
+#### Create the simplified tennis dataset :
+
+```{r}
+tennis <- data.frame(
+  Outlook = c("Sunny", "Sunny", "Overcast", "Rainy", "Rainy", "Rainy", "Overcast", "Sunny", "Sunny", "Rainy", "Sunny", "Overcast", "Overcast", "Rainy"),
+  Temperature = c("Hot", "Hot", "Hot", "Mild", "Cool", "Cool", "Cool", "Mild", "Cool", "Mild", "Mild", "Mild", "Hot", "Mild"),
+  Humidity = c("High", "High", "High", "High", "Normal", "Normal", "Normal", "High", "Normal", "Normal", "Normal", "High", "Normal", "High"),
+  Wind = c("Weak", "Strong", "Weak", "Weak", "Weak", "Strong", "Strong", "Weak", "Weak", "Weak", "Strong", "Strong", "Weak", "Strong"),
+  Play = c("No", "No", "Yes", "Yes", "Yes", "No", "Yes", "No", "Yes", "Yes", "Yes", "Yes", "Yes", "No")
+)
+
+```
+
+
+#### Display the structure of the dataset :
+
+```{r}
+str(tennis)
+
+```
+
+#### Create decision trees with different minimal node sizes :
+
+```{r}
+tree_minsplit_1 <- rpart(Play ~ . , data = tennis , minsplit = 1)
+tree_minsplit_2 <- rpart(Play ~ ., data = tennis, minsplit = 2)
+tree_minsplit_5 <- rpart(Play ~ ., data = tennis, minsplit = 5)
+tree_minsplit_14 <-rpart(Play ~ ., data = tennis, minsplit = 14)
+```
+
+#### Visualize the trees :
+
+```{r}
+
+plot(tree_minsplit_1)
+text(tree_minsplit_1)
+plot(tree_minsplit_2)
+text(tree_minsplit_2)
+plot(tree_minsplit_5)
+text(tree_minsplit_5)
+plot(tree_minsplit_14)
+text(tree_minsplit_14)
+```
+ 
+
+## EXO 2 :
+
+# with tree
+
+#### Load the iris dataset  :
+
+```{r}
+
+data(iris)
+
+```
+
+#### Display the first few records   :
+
+```{r}
+
+head(iris)
+
+```
+
+#### Load the rpart library  :
+
+```{r}
+
+library(rpart)
+
+```
+
+#### Create decision trees:
+
+```{r}
+tree <- rpart(Species ~ ., data = iris)
+
+#Visualize the decision tree
+
+plot(tree)
+text(tree)
+
+```
+
+#### Evaluate the classification quality :
+### Predict the species using the decision tree
+```{r}
+
+predicted <- predict(tree, newdata = iris, type = "class")
+
+```
+
+
+# Create a confusion matrix
+```{r}
+
+table(iris$Species, predicted)
+
+```
+
+## EXO 3 :
+
+#  with C5.0 :
+
+#### Load the c50 package on R :
+
+```{r}
+
+library(rpart)
+library(gmodels)
+
+```
+
+
+#### load the file  credit.csv :
+
+```{r}
+credit <- read.csv('~/Desktop/chaimas2/ml/TALHI-CHAIMA-CS-M1/credit.csv')
+
+```
+
+#### print the header of the file credit.csv :
+
+```{r}
+
+head(credit)
+```
+
+#### print the structure  :
+
+```{r}
+
+str(credit)
+```
+
+
+#### display the number of occurances of checking balance and savings balance  :
+
+```{r}
+
+table(credit$checking_balance)
+table(credit$savings_balance)
+
+```
+
+
+
+#### display the statistics of months_loan_duration  :
+
+```{r}
+
+summary(credit$months_loan_duration)
+
+
+```
+
+#### display the statistics of amount  :
+```{r}
+
+summary(credit$amount)
+
+
+```
+
+#### display the props of credit result   :
+```{r}
+
+prop.table(table(credit$default))
+
+
+```
+
+
+#### Répartir les données credit.csv en 90% pour l'apprentissage et 10% pour les tests  :
+```{r}
+
+set.seed(123) # To make the splitting reproducible
+train_indices <- sample(1:nrow (credit) ,0.9*nrow(credit))
+train_data <- credit[train_indices, ]
+test_data <- credit[-train_indices, ]
+
+```
+
+
+
+
+#### Vérifier les proportions par la commande prop.table :
+```{r}
+
+prop.table(table(train_data$default))
+prop.table(table(test_data$default))
+
+```
+
+
+
+####  Créer un modèle d'arbre de décision par rpart :
+```{r}
+
+model <- rpart(default  ~ ., data = train_data)
+
+```
+
+
+####  evaluation du model :
+```{r}
+
+summary(model)
+
+```
+
+
+#### Utiliser la fonction CrossTable pour évaluer le modèle :
+```{r}
+library(rpart)
+library(gmodels)
+CrossTable(train_data$default, predict(model, train_data), prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE)
+CrossTable(test_data$default, predict(model, test_data), prop.chisq = FALSE, prop.t = FALSE, prop.r = FALSE)
+
+```
+
+
