@@ -1,19 +1,25 @@
 package application;
 
-public class Course {
-    private String courseId;
-    private String coursePath;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-    public Course(String courseId, String coursePath) {
+public class Course {
+    private int courseId;
+    private String coursePath;
+    private String courseContent;
+
+    public Course(int courseId, String coursePath, String courseContent) {
         this.courseId = courseId;
         this.coursePath = coursePath;
+        this.courseContent = courseContent;
     }
 
-    public String getCourseId() {
+    public int getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
+    public void setCourseId(int courseId) {
         this.courseId = courseId;
     }
 
@@ -23,5 +29,13 @@ public class Course {
 
     public void setCoursePath(String coursePath) {
         this.coursePath = coursePath;
+    }
+
+    public String getCourseContent() {
+        return courseContent;
+    }
+
+    public void setCourseContent(String courseContent) {
+        this.courseContent = courseContent;
     }
 }
