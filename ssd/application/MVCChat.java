@@ -6,8 +6,14 @@ import java.lang.reflect.Method;
 import application.MessageView;
 public class MVCChat {
     public static void main(String[] args) {
+
+        
+        
+        
+        
         // Participant Management (example)
         ParticipantListModel participantModel = new ParticipantListModel();
+        
         RegisterView registerView = new RegisterView(participantModel, 100, 100);
         ParticipantListView participantListView = new ParticipantListView(participantModel, 600, 100);
 
@@ -28,7 +34,7 @@ public class MVCChat {
         messageView.display();
 
         // Simulate getting updated course information (replace with your logic)
-        String updatedCourseText = " also hello here , This is some course information!";
+        String updatedCourseText = " This is some course information!";
      // Update CourseView with new information
         courseView.updateCourse(updatedCourseText);
 
